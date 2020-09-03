@@ -3,7 +3,6 @@ from abc import ABCMeta, abstractmethod
 
 class Observer(metaclass=ABCMeta):
 
-
   @abstractmethod
   def update(self, observable, data):
     pass
@@ -23,3 +22,6 @@ class Observable:
   def notifyObservers(self, data=None):
     for o in self.__observers:
       o.update(self, data)
+
+if __name__ == "__main__":
+  print('framework')
