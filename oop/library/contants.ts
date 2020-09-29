@@ -47,5 +47,8 @@ export class BooksConstants {
     static readonly MAX_LENDING_DAYS = 10;
 }
 
+export class Author extends Person {
+    private title:string;
+}
 
 
