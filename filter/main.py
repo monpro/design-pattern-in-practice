@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class Filter(ABCMeta):
+class Filter(metaclass=ABCMeta):
 
   @abstractmethod
   def doFilter(self, elements):
