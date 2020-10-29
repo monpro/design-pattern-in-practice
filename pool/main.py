@@ -1,3 +1,4 @@
+import time
 from abc import ABCMeta, abstractmethod
 import logging
 
@@ -51,7 +52,29 @@ class ObjectPool(metaclass=ABCMeta):
     self.pools.clear()
 
   def borrowObject(self):
-    pass
+    obj = self.findFreeObject()
+    if obj is not None:
+      logging.info('{} object has been borrowed at {}'.format(id(obj), time.time()))
+      return obj
+    if len(self.pools) < self.max_num_of_objects:
+      obj = self.addObject()
+      obj.setBusy(True)
+      logging.info('{} object has been borrowed at {}'.format(id(obj), time.time()))
+      return obj.getObject()
+    return None
 
-  def returnObject(self):
-    pass
+  def returnObject(self, obj):
+    for pooled_obj in self.pools:
+      if pooled_obj.getObject() == obj:
+        pooled_obj.setBusy(False)
+        logging.info('{} object has been returned at {}'.format(id(obj), time.time()))
+        return True
+    return False
+
+  def addObject(self):
+    obj = None
+    if len(self.pools) < self.max_num_of_objects:
+      obj = self.createPooledObject()
+      self.pools.append(obj)
+      logging.info('{} object has been added at {}'.format(id(obj), time.time()))
+    return obj
